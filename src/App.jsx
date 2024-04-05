@@ -11,6 +11,7 @@ import { useState } from "react"
 const App = () => {
   const [data, setData] = useState(contacts)
 
+  const [searchStr, setSearchStr] = useState('')
 
   const handleDelete = id => {
     setData(prev => prev.filter(item => item.id !== id))
@@ -21,7 +22,7 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
       <ContactForm />
-      <SearchBox />
+      <SearchBox searchStr={searchStr} setSearch={setSearchStr} />
       <ContactList data={data} onDelete={handleDelete} />
     </div>
   )
