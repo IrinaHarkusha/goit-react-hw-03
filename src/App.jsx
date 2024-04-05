@@ -17,13 +17,18 @@ const App = () => {
     setData(prev => prev.filter(item => item.id !== id))
   }
 
+  const getFilteresData = () => {
+    return data.filter(item => item.name.toLowerCase().includes(searchStr.toLowerCase()) || item.number.includes(searchStr.toLowerCase())
+    )
+  }
+  const filteredData = getFilteresData()
 
   return (
     <div>
       <h1>Phonebook</h1>
       <ContactForm />
       <SearchBox searchStr={searchStr} setSearch={setSearchStr} />
-      <ContactList data={data} onDelete={handleDelete} />
+      <ContactList data={filteredData} onDelete={handleDelete} />
     </div>
   )
 }
