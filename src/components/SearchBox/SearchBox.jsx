@@ -1,10 +1,18 @@
+import s from "./SearchBox.module.css";
 
-const SearchBox = ({ searchStr, setSearch }) => {
+function SearchBox({ searchStr, setSearch }) {
   return (
-    <div>
-      <input value={searchStr} onChange={e => setSearch(e.target.value)} className="input" type='text' placeholder="Enter contact name..." />
+    <div className={s.wrap}>
+      <h2>Find contacts by name</h2>
+      <input
+        value={searchStr}
+        onChange={(e) => setSearch(e.target.value)}
+        className={s.input}
+        type="text"
+        placeholder="Enter contact name..."
+      />
     </div>
-  )
+  );
 }
 
-export default SearchBox
+export default SearchBox;

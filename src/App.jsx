@@ -1,36 +1,54 @@
-import ContactForm from "./components/ContactForm/ContactForm"
-import ContactList from "./components/ContactList/ContactList"
-import SearchBox from "./components/SearchBox/SearchBox"
-import "modern-normalize"
-import "./App.css"
-import contacts from "./assets/contact.json"
-import { useState } from "react"
+import ContactForm from "./components/ContactForm/ContactForm";
+import ContactList from "./components/ContactList/ContactList";
+import SearchBox from "./components/SearchBox/SearchBox";
+import "./App.css";
+import contactsData from "./assets/contact.json";
+import { useEffect, useState } from "react";
 
-const App = () => {
-  const [data, setData] = useState(contacts)
-  const [searchStr, setSearchStr] = useState('')
-  const handleDelete = id => {
-    setData(prev => prev.filter(item => item.id !== id))
-  }
+function App () {
+  const [contacts, setContacts] = useState(() => {
+    const savedContacts = JSON.parse(window.localStorage.getItem("contacts"));
+    if (savedContacts?.length) {
+      return savedContacts;
+    }
+    return contactsData;
+  })
+
+  const [searchStr, setSearchStr] = useState("");
+
+  useEffect(() => {
+    window.localStorage.setItem("contacts", JSON.stringify(contacts));
+  }, [contacts]);
+
+  const handleDelete = (id) => {
+    setContacts((prev) => prev.filter((item) => item.id !== id));
+  };
 
   const addContact = (contact) => {
-    setData(prev => [contact, ...prev])
-  }
+    setContacts((prev) => [contact, ...prev]);
+  };
 
   const getFilteresData = () => {
-    return data.filter(item => item.name.toLowerCase().includes(searchStr.toLowerCase()) || item.number.includes(searchStr.toLowerCase())
-    )
-  }
-  const filteredData = getFilteresData()
+    return contacts.filter(
+      (item) =>
+        item.name.toLowerCase().includes(searchStr.toLowerCase()) ||
+        item.number.includes(searchStr)
+    );
+  };
+  const filteredData = getFilteresData();
 
   return (
-    <div>
+    <div className="wrapper">
       <h1>Phonebook</h1>
       <ContactForm addContact={addContact} />
       <SearchBox searchStr={searchStr} setSearch={setSearchStr} />
-      <ContactList data={filteredData} onDelete={handleDelete} />
+      <ContactList
+        searchStr={searchStr}
+        data={filteredData}
+        onDelete={handleDelete}
+      />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

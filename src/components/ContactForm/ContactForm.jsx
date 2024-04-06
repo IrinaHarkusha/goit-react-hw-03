@@ -1,9 +1,18 @@
-import { Field, Form, Formik } from "formik"
-import { nanoid } from 'nanoid'
-
-
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { nanoid } from "nanoid";
+import * as Yup from "yup";
+import s from "./ContactForm.module.css";
 
 function ContactForm({ addContact }) {
+  const addSchema = Yup.object().shape({
+    name: Yup.string()
+      .min(3, 'The name must be more than 3')
+      .max(50, 'Name must be less than 50')
+      .required('Required'),
+    number: Yup.number()
+      .min(100)
+      .required('Required'),
+  })
 
   const initialValues = {
     name: '',
@@ -11,33 +20,44 @@ function ContactForm({ addContact }) {
   };
 
   const handleSubmit = (data, option) => {
-    addContact({ ...data, id: nanoid() })
-    option.resetForm()
+    addContact({ ...data, id: nanoid() });
+    option.resetForm();
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-      <Form>
-        <label className="label">
+    <Formik
+      initialValues={initialValues}
+      onSubmit={handleSubmit}
+      validationSchema={addSchema}
+    >
+      <Form className={s.form}>
+        <label>
           Name
-          <Field name="name" className="input" type="text" placeholder='Enter name...' />
+          <Field
+            name="name"
+            className={s.input}
+            type="text"
+            placeholder="Enter name..."
+          />
+          <ErrorMessage component="span" className={s.red} name="name" />
         </label>
-        <label className="label">
+        <label>
           Number
-          <Field name="number" className="input" type="text" placeholder='Enter number...' />
+          <Field
+            name="number"
+            className={s.input}
+            type="text"
+            placeholder="Enter number..."
+          />
+          <ErrorMessage component="span" className={s.red} name="number" />
         </label>
-        <button type="submit" className="btn">Add contact</button>
+        <button type="submit" className={s.btn}>
+          Add contact
+        </button>
       </Form>
     </Formik>
   )
 }
 
+export default ContactForm;
 
-
-export default ContactForm
-
-
-// поля повинні бути обов'язковими для заповнення
-// мінімальна кількість символів - 3
-// максимальна кількість символів - 50
-// Після завершення цього кроку застосунок повинен виглядати приблизно так.
