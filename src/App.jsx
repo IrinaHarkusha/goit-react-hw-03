@@ -5,16 +5,16 @@ import "modern-normalize"
 import "./App.css"
 import contacts from "./assets/contact.json"
 import { useState } from "react"
-// import { nanoid } from 'nanoid'
-// import * as Yup from 'yup'
 
 const App = () => {
   const [data, setData] = useState(contacts)
-
   const [searchStr, setSearchStr] = useState('')
-
   const handleDelete = id => {
     setData(prev => prev.filter(item => item.id !== id))
+  }
+
+  const addContact = (contact) => {
+    setData(prev => [contact, ...prev])
   }
 
   const getFilteresData = () => {
@@ -26,7 +26,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <ContactForm />
+      <ContactForm addContact={addContact} />
       <SearchBox searchStr={searchStr} setSearch={setSearchStr} />
       <ContactList data={filteredData} onDelete={handleDelete} />
     </div>
